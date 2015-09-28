@@ -18,6 +18,7 @@ let
     bap = camlCall ./bap.nix {};
     libbap = camlCall ./libbap.nix {};
     bap_rust = selfCall ./bap-rust.nix {};
+    holmes = selfCall ./holmes.nix {};
   };
 in
 self
