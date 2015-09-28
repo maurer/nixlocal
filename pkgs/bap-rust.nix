@@ -10,5 +10,5 @@ buildRustPackage rec {
     sha256 = "0fyky7s0skrlhg8db85mlhpzrhjzjah4axf3cnpbs0ak8g7yj6h3";
   };
   buildInputs = [ libbap ];
-  depsSha256 = "15db80nmsypcdmfv78jc31pkl9rbkila4aya606krqkd6hbciw24";
+  depsSha256 = "103w36wyy7061f210bl2k1i75rh7mz8c25c9z35zxacrb5sq0f70";
 }
