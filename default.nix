@@ -2,5 +2,5 @@
 
 rec {
   pkgs = import ./pkgs.nix {pkgs = nixpkgs;};
-  envs = import ./envs.nix {pkgs = pkgs // nixpkgs; lib = nixpkgs.lib;};
+  envs = import ./envs.nix {pkgs = nixpkgs // pkgs; lib = nixpkgs.lib;};
 }
