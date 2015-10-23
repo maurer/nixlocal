@@ -19,6 +19,13 @@ let
     libbap = camlCall ./libbap.nix {};
     bap_rust = selfCall ./bap-rust.nix {};
     holmes = selfCall ./holmes.nix {};
+    bil = camlCall ./bil.nix {};
+    caml_bz2 = camlCall ./camlbz2.nix {};
+    ocamlPackages = ocamlP;
+    ocaml_curses = camlCall ./ocaml-curses.nix {};
+    ofuzz = camlCall ./ofuzz.nix {};
+    ocaml_libinput = camlCall ./input.nix {};
+    symfuzz = camlCall ./symfuzz.nix {};
   };
 in
 self
