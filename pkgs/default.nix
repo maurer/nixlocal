@@ -26,6 +26,7 @@ let
     ofuzz = camlCall ./ofuzz.nix {};
     ocaml_libinput = camlCall ./input.nix {};
     symfuzz = camlCall ./symfuzz.nix {};
+    aflSymfuzz = baseCall ./afl-symfuzz.nix {};
   };
 in
 self
