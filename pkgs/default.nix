@@ -31,5 +31,11 @@ let
       packages = self: [self.xmonad-contrib self.xmonad-extras];
     };
   };
+  self_lib = {
+    baseCall = baseCall;
+    allCall  = allCall;
+    selfCall = selfCall;
+    camlCall = camlCall;
+  };
 in
-self
+self // {lib = self_lib;}
