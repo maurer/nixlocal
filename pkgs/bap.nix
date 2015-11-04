@@ -1,5 +1,4 @@
-{stdenv, buildOcaml, fetchgit, fetchurl, camlp4, ocaml_oasis, bitstring, camlzip, cmdliner, cohttp, core_kernel, ezjsonm, faillib, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_34, ulex, easy-format, xmlm, utop, which, makeWrapper,
-openssl, curl, libssh2}:
+{stdenv, buildOcaml, fetchgit, fetchurl, camlp4, ocaml_oasis, bitstring, camlzip, cmdliner, cohttp, core_kernel, ezjsonm, faillib, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_34, ulex, easy-format, xmlm, utop, which, makeWrapper, ncurses}:
 
 buildOcaml rec {
   name = "bap";
@@ -21,16 +20,13 @@ buildOcaml rec {
                   core_kernel ezjsonm faillib fileutils ocaml_lwt
                   ocamlgraph ocurl re uri zarith piqi piqi-ocaml uuidm
                   llvm_34
-                  #transdeps (trick to deal with ocaml issue on OSX)
-                  #WARNING: These must be the same as what the libs
-                  #were built with. This is not the right way.
-                  openssl libssh2 curl
                   #rdeps
                   utop
                   #build tricks
                   which
                   makeWrapper
                   ];
+  propagatedBuildInputs = [ faillib bitstring camlzip cmdliner cohttp core_kernel ezjsonm fileutils ocaml_lwt ocamlgraph ocurl re uri zarith piqi piqi-ocaml uuidm ncurses ];
 
   installPhase = ''
   cat <<EOF > baptop
@@ -43,9 +39,6 @@ buildOcaml rec {
   ln -s $sigs $out/share/bap/sigs.zip
   '';
 
-  preConfigurePhase = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -L${libssh2}/lib -L${curl}/lib -L${openssl}/lib"
-  '';
   configureFlags = "${if stdenv.isDarwin then "--with-cxxlibs=-lc++ " else ""}--with-llvm-config ${llvm_34}/bin/llvm-config";
 
   meta = with stdenv.lib; {
