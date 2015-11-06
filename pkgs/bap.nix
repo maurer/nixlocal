@@ -1,22 +1,24 @@
-{stdenv, buildOcaml, fetchgit, fetchurl, camlp4, ocaml_oasis, bitstring, camlzip, cmdliner, cohttp, core_kernel, ezjsonm, faillib, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_34, ulex, easy-format, xmlm, utop, which, makeWrapper, ncurses}:
+{stdenv, buildOcaml, camlp4, ocaml, findlib, fetchFromGitHub, fetchurl, ocaml_oasis, bitstring, camlzip, cmdliner, cohttp, core_kernel, ezjsonm, faillib, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_34, ulex, easy-format, xmlm, utop, which, makeWrapper, ncurses}:
 
+# TODO buildOcaml doesn't have any way of knowing which ocaml it's using - this must be the same one we provide to bapbuild later in the environment overload
 buildOcaml rec {
   name = "bap";
-  version = "8d1a7c";
-  src = fetchgit {
-    url = "https://github.com/maurer/bap.git";
-    rev = "e730fbed49f159e305450cab20d811e129964397";
-    sha256 = "17vbpbv6l9n4d162pvp312z66l9qrp18205g0d37bdfxisy6iyms";
+  version = "0.9.9";
+  src = fetchFromGitHub {
+    owner  = "BinaryAnalysisPlatform";
+    repo   = "bap";
+    rev    = "v0.9.9";
+    sha256 = "0i0ikc12l8ss9f58qb1x1m40y7qpmarivggn7k1kbblgh5dsizwj";
   };
 
   sigs = fetchurl {
-     url = "https://github.com/BinaryAnalysisPlatform/bap/releases/download/v0.9.8/sigs.zip";
+     url = "https://github.com/BinaryAnalysisPlatform/bap/releases/download/v0.9.9/sigs.zip";
      sha256 = "0mpsq2pinbrynlisnh8j3nrlamlsls7lza0bkqnm9szqjjdmcgfn";
   };
 
   createFindlibDestdir = true;
 
-  buildInputs = [ camlp4 ocaml_oasis bitstring camlzip cmdliner cohttp
+  buildInputs = [ ocaml findlib camlp4 ocaml_oasis bitstring camlzip cmdliner cohttp
                   core_kernel ezjsonm faillib fileutils ocaml_lwt
                   ocamlgraph ocurl re uri zarith piqi piqi-ocaml uuidm
                   llvm_34
@@ -28,6 +30,8 @@ buildOcaml rec {
                   ];
   propagatedBuildInputs = [ faillib bitstring camlzip cmdliner cohttp core_kernel ezjsonm fileutils ocaml_lwt ocamlgraph ocurl re uri zarith piqi piqi-ocaml uuidm ncurses ];
 
+
+#TODO Exporting OCAMLPATH and PATH like this massively bloats the package, making it unsuitable for non-dev systems
   installPhase = ''
   cat <<EOF > baptop
   #!/bin/bash
@@ -35,7 +39,7 @@ buildOcaml rec {
   exec `which utop` -require bap.top "\$@"
   EOF
   make install
-  rm $out/bin/bapbuild
+  wrapProgram $out/bin/bapbuild --suffix-each PATH : ${ocaml}/bin ${camlp4}/bin ${findlib}/bin --set OCAMLPATH `echo $OCAMLPATH`:`echo $OCAMLFIND_DESTDIR`
   ln -s $sigs $out/share/bap/sigs.zip
   '';
 
