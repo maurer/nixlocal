@@ -1,4 +1,4 @@
-{ base, gui, pianobar, latex, mendeley, gdb, vim, buildEnv }:
+{ base, gui, pianobar, latex, mendeley, gdb, vim, buildEnv, bap }:
 
 buildEnv rec {
   name = "laptop";
@@ -10,5 +10,6 @@ buildEnv rec {
     latex
     mendeley
     gdb
+    bap
   ];
 }
