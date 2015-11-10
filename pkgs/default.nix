@@ -27,6 +27,7 @@ let
     ocaml_libinput = camlCall ./input.nix {};
     symfuzz = camlCall ./symfuzz.nix {};
     aflSymfuzz = baseCall ./afl-symfuzz.nix {};
+    maven-j7 = baseCall ./maven.nix {jdk = pkgs.oraclejdk7;};
     xmonad = pkgs.xmonad-with-packages.override {
       packages = self: [self.xmonad-contrib self.xmonad-extras];
     };
