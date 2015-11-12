@@ -15,6 +15,7 @@ let
     vil = baseCall ./vim-lite.nix {};
     vim = allCall ./vim.nix {};
     latex = baseCall ./latex.nix {};
+    igraph = baseCall ./igraph.nix {};
     bap = camlCall ./bap.nix {};
     libbap = camlCall ./libbap.nix {};
     bap_rust = selfCall ./bap-rust.nix {};
