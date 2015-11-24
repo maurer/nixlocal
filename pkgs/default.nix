@@ -32,6 +32,7 @@ let
     xmonad = pkgs.xmonad-with-packages.override {
       packages = self: [self.xmonad-contrib self.xmonad-extras];
     };
+    sandstorm = baseCall ./sandstorm.nix {};
   };
   self_lib = {
     baseCall = baseCall;
