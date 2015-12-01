@@ -8,6 +8,7 @@ let
   self = rec {
     base   = envCall ./base.nix   {};
     laptop = envCall ./laptop.nix {};
+    dev    = envCall ./dev.nix {};
     gui    = envCall ./gui.nix    {};
   };
 in
