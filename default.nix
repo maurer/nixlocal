@@ -1,4 +1,4 @@
-{nixpkgs ? import <nixpkgs> { config.allowUnfree = true; }}:
+{nixpkgs ? import <nixpkgs> {}}:
 
 rec {
   pkgs = import ./pkgs.nix {pkgs = nixpkgs;};

@@ -1,14 +1,14 @@
-{stdenv, buildOcaml, camlp4, ocaml, findlib, fetchFromGitHub, fetchurl, ocaml_oasis, bitstring, camlzip, cmdliner, cohttp, core_kernel, ezjsonm, faillib, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_34, ulex, easy-format, xmlm, utop, which, makeWrapper, ncurses}:
+{stdenv, ocaml, buildOcaml, camlp4, findlib, fetchFromGitHub, fetchurl, ocaml_oasis, bitstring, camlzip, cmdliner, cohttp, core_kernel, ezjsonm, faillib, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_34, ulex, easy-format, xmlm, utop, which, makeWrapper, ncurses, frontc}:
 
 # TODO buildOcaml doesn't have any way of knowing which ocaml it's using - this must be the same one we provide to bapbuild later in the environment overload
 buildOcaml rec {
   name = "bap";
-  version = "0.9.9";
+  version = "master";
   src = fetchFromGitHub {
     owner  = "BinaryAnalysisPlatform";
     repo   = "bap";
-    rev    = "v0.9.9";
-    sha256 = "0i0ikc12l8ss9f58qb1x1m40y7qpmarivggn7k1kbblgh5dsizwj";
+    rev    = "a98c94a0052ff9cff82af5cc2eb5e668234b68e5";
+    sha256 = "0k0xnihl7yy845navy2zv77a2z36s8dl7vl950c2nvbbz57lqz04";
   };
 
   sigs = fetchurl {
@@ -20,7 +20,7 @@ buildOcaml rec {
 
   buildInputs = [ ocaml findlib camlp4 ocaml_oasis bitstring camlzip cmdliner cohttp
                   core_kernel ezjsonm faillib fileutils ocaml_lwt
-                  ocamlgraph ocurl re uri zarith piqi piqi-ocaml uuidm
+                  ocamlgraph ocurl re uri zarith piqi piqi-ocaml uuidm frontc
                   llvm_34
                   #rdeps
                   utop

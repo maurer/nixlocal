@@ -22,6 +22,7 @@ let
     holmes = selfCall ./holmes.nix {};
     bil = camlCall ./bil.nix {};
     caml_bz2 = camlCall ./camlbz2.nix {};
+    frontc = camlCall ./frontc.nix {};
     ocamlPackages = ocamlP;
     ocaml_curses = camlCall ./ocaml-curses.nix {};
     ofuzz = camlCall ./ofuzz.nix {};
