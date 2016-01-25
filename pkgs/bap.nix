@@ -1,4 +1,4 @@
-{stdenv, ocaml, buildOcaml, camlp4, findlib, fetchFromGitHub, fetchurl, ocaml_oasis, bitstring, camlzip, cmdliner, cohttp, core_kernel, ezjsonm, faillib, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_34, ulex, easy-format, xmlm, utop, which, makeWrapper, ncurses, frontc}:
+{stdenv, lib, ocaml, buildOcaml, camlp4, findlib, fetchFromGitHub, fetchurl, ocaml_oasis, bitstring, camlzip, cmdliner, cohttp, core_kernel, ezjsonm, faillib, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_34, ulex, easy-format, xmlm, utop, which, makeWrapper, ncurses, frontc}:
 
 # TODO buildOcaml doesn't have any way of knowing which ocaml it's using - this must be the same one we provide to bapbuild later in the environment overload
 buildOcaml rec {
@@ -39,7 +39,7 @@ buildOcaml rec {
   exec `which utop` -require bap.top "\$@"
   EOF
   make install
-  wrapProgram $out/bin/bapbuild --suffix-each PATH : ${ocaml}/bin ${camlp4}/bin ${findlib}/bin --set OCAMLPATH `echo $OCAMLPATH`:`echo $OCAMLFIND_DESTDIR`
+  wrapProgram $out/bin/bapbuild --prefix PATH : ${ lib.makeBinPath [ ocaml camlp4 findlib ] } --set OCAMLPATH `echo $OCAMLPATH`:`echo $OCAMLFIND_DESTDIR`
   ln -s $sigs $out/share/bap/sigs.zip
   '';
 
