@@ -1,4 +1,6 @@
-let local = import ./default.nix {}; in
+{nixpkgs}:
+
+let local = import ./default.nix {inherit nixpkgs;}; in
 
 {
   bap      = local.pkgs.bap;
