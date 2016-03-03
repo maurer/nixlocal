@@ -6,9 +6,9 @@ buildRustPackage rec {
   src  = fetchFromGitHub {
     owner  = "maurer";
     repo   = "bap-rust";
-    rev    = "67a0f70d44c7e6b82c9540bf872cd4cb5547fcfe";
-    sha256 = "0fyky7s0skrlhg8db85mlhpzrhjzjah4axf3cnpbs0ak8g7yj6h3";
+    rev    = "6a3d4ece3b6b2f4ad815201238fcfc76bcc69802";
+    sha256 = "10qdwxjsbnyqnbj44h9fyvdda76599p4y3i523c2faqzlhrcnqcd";
   };
   buildInputs = [ libbap ];
-  depsSha256 = "103w36wyy7061f210bl2k1i75rh7mz8c25c9z35zxacrb5sq0f70";
+  depsSha256 = "04i8sdi0gys0pfqv1wq6z67hvzjw08zgb3754xqjim2saiphm8av";
 }
