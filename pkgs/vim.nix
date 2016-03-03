@@ -26,7 +26,7 @@ let vim = vim_configurable.customize {
         "vimproc"
         "haskellconceal"
         "fugitive"
-        "racer"
+        #"racer"
       ];
     };
   }; in
@@ -40,6 +40,6 @@ lib.lowPrio (buildEnv rec {
     python
     git
     vim
-    racerRust
+    #racerRust
   ];
 })
