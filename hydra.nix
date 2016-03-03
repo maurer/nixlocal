@@ -7,5 +7,9 @@ let local = import ./default.nix {}; in
   holmes   = local.pkgs.holmes;
   symfuzz  = local.pkgs.symfuzz;
   ofuzz    = local.pkgs.ofuzz;
-  laptop   = local.envs.laptop;
+  vim      = local.pkgs.vim;
+  latex    = local.pkgs.latex;
+  holmes   = local.pkgs.holmes;
+  jakstab  = local.pkgs.jakstab;
+  csmith   = local.pkgs.csmith;
 }
