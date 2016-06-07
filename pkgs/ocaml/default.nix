@@ -1,80 +1,62 @@
-let
-  safeX11 = stdenv: !(stdenv.isArm || stdenv.isMips);
-in
-
-{ stdenv, fetchurl, ncurses, buildEnv, libX11, xproto, useX11 ? safeX11 stdenv }:
-
-assert useX11 -> !stdenv.isArm && !stdenv.isMips;
+{lib, pkgs}:
 
 let
-   useNativeCompilers = !stdenv.isMips;
-   inherit (stdenv.lib) optionals optionalString;
+  ocamlP   = pkgs.mkOcamlPackages pkgs.ocaml_4_02 (ocamlP // self);
+  camlCall = lib.callPackageWith (pkgs // ocamlP // self);
+  self = rec {
+    piqi = camlCall ./piqi {};
+    piqi-ocaml = camlCall ./piqi-ocaml {};
+    buildOcamlJane = camlCall ./buildOcamlJane.nix {};
+    uri = camlCall ./uri {};
+    cstruct = camlCall ./cstruct {};
+    async = camlCall ./async {};
+    async_kernel = camlCall ./async_kernel {};
+    async_unix = camlCall ./async_unix {};
+    async_extra = camlCall ./async_extra {};
+    async_rpc_kernel = camlCall ./async_rpc_kernel {};
+    bin_prot = camlCall ./bin_prot.nix {};
+    fieldslib = camlCall ./fieldslib.nix {};
+    sexplib = camlCall ./sexplib.nix {};
+    typerep = camlCall ./typerep.nix {};
+    variantslib = camlCall ./variantslib.nix {};
+    core_kernel = camlCall ./core_kernel.nix {};
+    ocamlgraph = camlCall ./ocamlgraph {};
+    core = camlCall ./core {};
+    ppx_assert = camlCall ./ppx-assert.nix {};
+    ppx_bench = camlCall ./ppx-bench.nix {};
+    ppx_bin_prot = camlCall ./ppx-bin-prot.nix {};
+    ppx_compare = camlCall ./ppx-compare.nix {};
+    ppx_core = camlCall ./ppx-core.nix {};
+    ppx_custom_printf = camlCall ./ppx-custom-printf.nix {};
+    ppx_deriving = camlCall ./ppx-deriving.nix {};
+    ppx_driver = camlCall ./ppx-driver.nix {};
+    ppx_enumerate = camlCall ./ppx-enumerate.nix {};
+    ppx_expect = camlCall ./ppx-expect.nix {};
+    ppx_fail = camlCall ./ppx-fail.nix {};
+    ppx_fields_conv = camlCall ./ppx-fields-conv.nix {};
+    ppx_here = camlCall ./ppx-here.nix {};
+    ppx_inline_test = camlCall ./ppx-inline-test.nix {};
+    ppx_jane = camlCall ./ppx-jane.nix {};
+    ppx_let = camlCall ./ppx-let.nix {};
+    ppx_optcomp = camlCall ./ppx-optcomp.nix {};
+    ppx_pipebang = camlCall ./ppx-pipebang.nix {};
+    ppx_sexp_conv = camlCall ./ppx-sexp-conv.nix {};
+    ppx_sexp_message = camlCall ./ppx-sexp-message.nix {};
+    ppx_sexp_value = camlCall ./ppx-sexp-value.nix {};
+    ppx_type_conv = camlCall ./ppx-type-conv.nix {};
+    ppx_typerep_conv = camlCall ./ppx-typerep-conv.nix {};
+    ppx_variants_conv = camlCall ./ppx-variants-conv.nix {};
+    js_build_tools = camlCall ./js-build-tools.nix {};
+    bap = camlCall ./bap.nix {};
+    libbap = camlCall ./libbap.nix {};
+    bil = camlCall ./bil.nix {};
+    caml_bz2 = camlCall ./camlbz2.nix {};
+    frontc = camlCall ./frontc.nix {};
+    ocamlPackages = ocamlP;
+    ocaml_curses = camlCall ./ocaml-curses.nix {};
+    ofuzz = camlCall ./ofuzz.nix {};
+    ocaml_libinput = camlCall ./input.nix {};
+    symfuzz = camlCall ./symfuzz.nix {};
+  };
 in
-
-stdenv.mkDerivation rec {
-
-  x11env = buildEnv { name = "x11env"; paths = [libX11 xproto]; };
-  x11lib = x11env + "/lib";
-  x11inc = x11env + "/include";
-
-  name = "ocaml-4.02.3";
-
-  src = fetchurl {
-    url = "http://caml.inria.fr/pub/distrib/ocaml-4.02/${name}.tar.xz";
-    sha256 = "1qwwvy8nzd87hk8rd9sm667nppakiapnx4ypdwcrlnav2dz6kil3";
-  };
-
-  patches = [ ./117.patch ];
-
-  prefixKey = "-prefix ";
-  configureFlags = optionals useX11 [ "-x11lib" x11lib
-                                      "-x11include" x11inc ];
-
-  buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
-  buildInputs = [ncurses] ++ optionals useX11 [ libX11 xproto ];
-  installTargets = "install" + optionalString useNativeCompilers " installopt";
-  preConfigure = ''
-    CAT=$(type -tp cat)
-    sed -e "s@/bin/cat@$CAT@" -i config/auto-aux/sharpbang
-  '';
-  postBuild = ''
-    mkdir -p $out/include
-    ln -sv $out/lib/ocaml/caml $out/include/caml
-  '';
-
-  passthru = {
-    nativeCompilers = useNativeCompilers;
-  };
-
-  meta = with stdenv.lib; {
-    homepage = http://caml.inria.fr/ocaml;
-    branch = "4.02";
-    license = with licenses; [
-      qpl /* compiler */
-      lgpl2 /* library */
-    ];
-    description = "Most popular variant of the Caml language";
-
-    longDescription =
-      ''
-        OCaml is the most popular variant of the Caml language.  From a
-        language standpoint, it extends the core Caml language with a
-        fully-fledged object-oriented layer, as well as a powerful module
-        system, all connected by a sound, polymorphic type system featuring
-        type inference.
-
-        The OCaml system is an industrial-strength implementation of this
-        language, featuring a high-performance native-code compiler (ocamlopt)
-        for 9 processor architectures (IA32, PowerPC, AMD64, Alpha, Sparc,
-        Mips, IA64, HPPA, StrongArm), as well as a bytecode compiler (ocamlc)
-        and an interactive read-eval-print loop (ocaml) for quick development
-        and portability.  The OCaml distribution includes a comprehensive
-        standard library, a replay debugger (ocamldebug), lexer (ocamllex) and
-        parser (ocamlyacc) generators, a pre-processor pretty-printer (camlp4)
-        and a documentation generator (ocamldoc).
-      '';
-
-    platforms = with platforms; linux ++ darwin;
-  };
-
-}
+self

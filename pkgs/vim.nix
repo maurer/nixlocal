@@ -1,4 +1,4 @@
-{vim_configurable, racerRust, hoogle, ghc-mod, git, vim, python, lib, buildEnv}:
+{vim_configurable, racerRust, hoogle, git, vim, python, lib, buildEnv}:
 
 let vim = vim_configurable.customize {
     name = "vim";
@@ -20,12 +20,8 @@ let vim = vim_configurable.customize {
       set tabstop=2 shiftwidth=2 expandtab
       '';
       vam.pluginDictionaries = [
-        "hoogle"
-        "rust"
-        "ghcmod"
-        "vimproc"
-        "haskellconceal"
-        "fugitive"
+        #"vimproc"
+        #"fugitive"
         #"racer"
       ];
     };
@@ -35,10 +31,8 @@ lib.lowPrio (buildEnv rec {
   name = "vim-env";
   ignoreCollisions = true;
   paths = [
-    hoogle
-    ghc-mod
-    python
-    git
+    #python
+    #git
     vim
     #racerRust
   ];

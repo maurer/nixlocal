@@ -1,4 +1,6 @@
-let local = import ./default.nix {}; in
+{nixpkgs ? import <nixpkgs> {}}:
+
+let local = import ./default.nix {inherit nixpkgs;}; in
 
 {
   bap      = local.pkgs.bap;
@@ -7,9 +9,5 @@ let local = import ./default.nix {}; in
   holmes   = local.pkgs.holmes;
   symfuzz  = local.pkgs.symfuzz;
   ofuzz    = local.pkgs.ofuzz;
-  vim      = local.pkgs.vim;
-  latex    = local.pkgs.latex;
-  holmes   = local.pkgs.holmes;
-  jakstab  = local.pkgs.jakstab;
-  csmith   = local.pkgs.csmith;
+  laptop   = local.envs.laptop;
 }

@@ -6,7 +6,7 @@ buildEnv rec {
   ignoreCollisions = true;
   paths = [
     rxvt_unicode
-    xmobar
+    #xmobar
     dmenu
     firefox
     chromium

@@ -5,29 +5,19 @@
 
 let
   haskell  = pkgs.haskellPackages;
-  ocamlP   = pkgs.mkOcamlPackages self.ocaml ocamlP;
+  ocamlP   = baseCall ./ocaml {inherit lib;};
   baseCall = lib.callPackageWith (pkgs // pkgs.lib);
   selfCall = lib.callPackageWith (pkgs // self);
-  camlCall = lib.callPackageWith (pkgs // ocamlP // self);
   allCall = lib.callPackageWith (pkgs // ocamlP // haskell // self);
   self = rec {
-    ocaml = baseCall ./ocaml.nix {libX11 = null; xproto = null; useX11 = false;};
     vil = baseCall ./vim-lite.nix {};
+    bap = ocamlP.bap;
     vim = allCall ./vim.nix {};
     latex = baseCall ./latex.nix {};
     igraph = baseCall ./igraph.nix {};
-    bap = camlCall ./bap.nix {};
-    libbap = camlCall ./libbap.nix {};
     bap_rust = selfCall ./bap-rust.nix {};
     holmes = selfCall ./holmes.nix {};
-    bil = camlCall ./bil.nix {};
-    caml_bz2 = camlCall ./camlbz2.nix {};
-    frontc = camlCall ./frontc.nix {};
     ocamlPackages = ocamlP;
-    ocaml_curses = camlCall ./ocaml-curses.nix {};
-    ofuzz = camlCall ./ofuzz.nix {};
-    ocaml_libinput = camlCall ./input.nix {};
-    symfuzz = camlCall ./symfuzz.nix {};
     aflSymfuzz = baseCall ./afl-symfuzz.nix {};
     jakstab = baseCall ./jakstab.nix {};
     csmith  = baseCall ./csmith.nix {};
@@ -41,7 +31,7 @@ let
     baseCall = baseCall;
     allCall  = allCall;
     selfCall = selfCall;
-    camlCall = camlCall;
+    camlCall = self.ocamlPackages.camlCall;
   };
 in
 self // {lib = self_lib;}
