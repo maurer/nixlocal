@@ -1,30 +1,10 @@
-{stdenv, buildOcaml, fetchurl, ocaml_oasis, js_build_tools, opam,
+{stdenv, buildOcamlJane,
  ppx_core, ppx_tools, ppx_type_conv}:
 
-buildOcaml rec {
+buildOcamlJane rec {
   name = "ppx_fields_conv";
-  version = "113.33";
-
-  minimumSupportedOcamlVersion = "4.02";
-
-  src = fetchurl {
-    url = "https://github.com/janestreet/${name}/archive/${version}.tar.gz";
-    sha256 = "12wm73racyn31y2q1vz44hg1fraqmhidw93w1cl15zkq2gn78brm";
-  };
-
-  hasSharedObjects = true;
-
-  buildInputs = [ ocaml_oasis js_build_tools opam ];
+  hash = "11w9wfjgkv7yxv3rwlwi6m193zan6rhmi45q7n3ddi2s8ls3gra7";
   propagatedBuildInputs = [ ppx_core ppx_tools ppx_type_conv ];
-
-  dontAddPrefix = true;
-
-  configurePhase = "./configure --prefix $out";
-
-
-  buildPhase = "OCAML_TOPLEVEL_PATH=`ocamlfind query findlib`/.. make";
-
-  installPhase = "opam-installer -i --prefix $prefix --libdir `ocamlfind printconf destdir` ${name}.install";
 
   meta = with stdenv.lib; {
     description = "Generation of accessor and iteration functions for ocaml records.";

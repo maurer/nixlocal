@@ -46,13 +46,16 @@ stdenv.mkDerivation rec {
 
 #TODO Exporting OCAMLPATH and PATH like this massively bloats the package, making it unsuitable for non-dev systems
   installPhase = ''
-  cat <<EOF > baptop
-  #!/bin/bash
   export OCAMLPATH=`echo $OCAMLPATH`:`echo $OCAMLFIND_DESTDIR`
-  exec ${utop}/bin/utop -require bap.top "\$@"
+  export PATH=$PATH:$out/bin
+  mkdir -p $out/lib/bap
+  cat <<EOF > tools/baptop
+  #!/bin/bash
+  export OCAMLPATH=`echo $OCAMLPATH`
+  exec ${utop}/bin/utop -ppx ppx-bap -short-paths -require "bap.top" "$@"
   EOF
   make install
-  wrapProgram $out/bin/bapbuild --prefix PATH : ${ lib.makeBinPath [ ocaml findlib ] } --set OCAMLPATH `echo $OCAMLPATH`:`echo $OCAMLFIND_DESTDIR`
+  wrapProgram $out/bin/bapbuild --prefix PATH : ${ lib.makeBinPath [ ocaml findlib ] } --set OCAMLPATH $OCAMLPATH
   ln -s $sigs $out/share/bap/sigs.zip
   '';
 

@@ -3,7 +3,12 @@
 
 buildOcamlJane rec {
   name = "ppx_bin_prot";
-  hash = "0kwmrrrybdkmphqczsr3lg3imsxcjb8iy41syvn44s3kcjfyyzbz";
+
+  minimumSupportedOcamlVersion = "4.02";
+  hash = "1h9qjwm32ixwgsj5lrlzqmyj7kl4abxx8kqh3s8v1wingbbsnypa";
+
+  hasSharedObjects = true;
+
   propagatedBuildInputs = [ ppx_core ppx_tools ppx_type_conv bin_prot ];
 
   meta = with stdenv.lib; {

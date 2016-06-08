@@ -4,6 +4,7 @@ let
   ocamlP   = pkgs.mkOcamlPackages pkgs.ocaml_4_02 (ocamlP // self);
   camlCall = lib.callPackageWith (pkgs // ocamlP // self);
   self = rec {
+    #opam = camlCall ./opam {};
     piqi = camlCall ./piqi {};
     piqi-ocaml = camlCall ./piqi-ocaml {};
     buildOcamlJane = camlCall ./buildOcamlJane.nix {};

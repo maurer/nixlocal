@@ -1,29 +1,10 @@
-{stdenv, buildOcaml, fetchurl, ocaml_oasis, js_build_tools, ppx_tools, opam}:
+{stdenv, buildOcamlJane, ppx_tools}:
 
-buildOcaml rec {
+buildOcamlJane rec {
   name = "ppx_core";
-  version = "113.33";
-
-  minimumSupportedOcamlVersion = "4.02";
-
-  src = fetchurl {
-    url = "https://github.com/janestreet/${name}/archive/${version}.tar.gz";
-    sha256 = "00jnm016zhynipqzn3kva322lywjg1ab2kn303grgnz4b0a04l70";
-  };
-
-  hasSharedObjects = true;
-
-  buildInputs = [ ocaml_oasis js_build_tools opam ];
+  hash = "0df7vyai488lfkyh8szw2hvn22jsyrkfvq1b91j1s0g0y27nnfax";
   propagatedBuildInputs =
     [ ppx_tools ];
-
-  dontAddPrefix = true;
-
-  configurePhase = "./configure --prefix $prefix";
-
-  buildPhase = "OCAML_TOPLEVEL_PATH=`ocamlfind query findlib`/.. make";
-
-  installPhase = "opam-installer -i --prefix $prefix --libdir `ocamlfind printconf destdir` ${name}.install";
 
   meta = with stdenv.lib; {
     description = "PPX standard library";

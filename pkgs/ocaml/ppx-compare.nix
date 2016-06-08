@@ -1,30 +1,11 @@
-{stdenv, buildOcaml, fetchurl, ocaml_oasis, js_build_tools, opam,
+{stdenv, buildOcamlJane,
  ppx_core, ppx_driver, ppx_tools, ppx_type_conv}:
 
-buildOcaml rec {
+buildOcamlJane rec {
   name = "ppx_compare";
-  version = "113.33";
-
-  minimumSupportedOcamlVersion = "4.02";
-
-  src = fetchurl {
-    url = "https://github.com/janestreet/${name}/archive/${version}.tar.gz";
-    sha256 = "1x9d1gadv4dq8hifln9ljdx35chpkd9ibjc4cm8kv4j8z6jv2491";
-  };
-
-  hasSharedObjects = true;
-
-  buildInputs = [ ocaml_oasis js_build_tools opam ];
+  hash = "05cnwxfxm8201lpfmcqkcqfy6plh5c2151jbj4qsnxhlvvjli459";
   propagatedBuildInputs =
     [ppx_core ppx_driver ppx_tools ppx_type_conv ];
-
-  dontAddPrefix = true;
-
-  configurePhase = "./configure --prefix $prefix";
-
-  buildPhase = "OCAML_TOPLEVEL_PATH=`ocamlfind query findlib`/.. make";
-
-  installPhase = "opam-installer -i --prefix $prefix --libdir `ocamlfind printconf destdir` ${name}.install";
 
   meta = with stdenv.lib; {
     description = "Generation of fast comparison functions from type expressions and definitions.";
